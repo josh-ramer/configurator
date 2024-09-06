@@ -1,0 +1,16 @@
+{
+  "material": "Silicon",
+  "type": "N-Channel",
+  "device": "MOSFET",
+  "application": "Power Management",
+  "industry": "Automotive",
+  "manufacturer": "Texas Instruments",
+  "model": "TSMC 5nm",
+  "waferSize": "300mm",
+  "fabricationProcess": "FinFET",
+  "packagingType": "QFN",
+  "thermalInterface": "Ceramic",
+  "leadFreeStatus": "Yes",
+  "roHSCompliant": "Yes",
+  "reliabilityLevel": "AEC-Q100"
+}
