@@ -8,9 +8,14 @@ using json = nlohmann::json;
 
 vector<string> parse_args(int argc, char *argv[]) {
   vector<string> input_files;
+  cout << SPACER << endl;
+  cout << "INPUT_FILES:" << endl;
   for (int i = 2; i < argc; i++) { // skip program name & flag
-    input_files.push_back(string(argv[i]));
+    string file(argv[i]);
+    cout << "\t" << file << endl;
+    input_files.push_back(file);
   }
+  cout << SPACER << endl;
   return input_files; // move semantics
 }
 
@@ -36,6 +41,7 @@ int help(int argc, char *argv[]) {
 int test_config(vector<string> file_paths) {
   Configurator<json, JsonParser> config(make_unique<JsonParser>(file_paths[0]));
   config.print();
+  cout << config.get_value("device") << endl;
   return SUCCESS;
 }
 

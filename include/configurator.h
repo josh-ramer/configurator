@@ -35,7 +35,6 @@ private:
 class JsonParser : ConfigParser<json> {
 public:
   JsonParser(string file_path) : istream(file_path) {}
-
   json parse() { return json::parse(istream); }
 
 private:
@@ -43,5 +42,11 @@ private:
 };
 
 template <typename S, typename P> void Configurator<S, P>::print() {
+  cout << SPACER << endl;
   cout << config << endl;
+}
+
+template <typename S, typename P>
+string Configurator<S, P>::get_value(string key) {
+  return config[key];
 }
