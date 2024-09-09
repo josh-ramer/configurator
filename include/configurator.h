@@ -4,15 +4,16 @@
 #include <iostream>
 #include <memory>
 #include <nlohmann/json.hpp>
+#include <sstream>
 #include <string>
 
 using std::unique_ptr, std::string, std::ifstream, std::ofstream, std::vector,
-    std::cout, std::endl;
+    std::cout, std::endl, std::stringstream, std::getline;
 using json = nlohmann::json;
 
 constexpr int SUCCESS = 0;
 constexpr int FAILURE = 1;
-const string SPACER = "\n--------------------------------------";
+const string SPACER = "\n--------------------------------------\n";
 
 template <typename S> class ConfigParser {
 public:
@@ -24,7 +25,7 @@ public:
   Configurator(unique_ptr<P> config_parser)
       : parser(std::move(config_parser)), config(parser->parse()) {}
   string set_value(string key, string value);
-  string get_value(string key);
+  template <typename T> T get_value(string key);
   void print();
 
 private:
@@ -42,11 +43,25 @@ private:
 };
 
 template <typename S, typename P> void Configurator<S, P>::print() {
-  cout << SPACER << endl;
-  cout << config << endl;
+  cout << SPACER;
+  cout << config.dump(4);
+  cout << SPACER;
 }
 
 template <typename S, typename P>
-string Configurator<S, P>::get_value(string key) {
-  return config[key];
+template <typename T>
+T Configurator<S, P>::get_value(string key) {
+  stringstream ss(key);
+  string token;
+
+  vector<string> key_parts;
+  while (getline(ss, token, '.')) {
+    key_parts.push_back(token);
+  }
+
+  json config_part(config);
+  for (int i = 0; i < key_parts.size() - 1; i++) {
+    config_part = config_part[key_parts[i]];
+  }
+  return config_part[key_parts.back()];
 }
